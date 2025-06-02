@@ -57,17 +57,8 @@ function step () {
     layer_buffer.image.fill(0)
 }
 function cursorValid () {
-    if (cursor.x > layer_visual.left && cursor.x < layer_visual.right && (cursor.y > layer_visual.top && cursor.y < layer_visual.bottom)) {
-        return true
-    } else {
-        return false
-    }
+    return cursor.x > layer_visual.left && cursor.x < layer_visual.right && (cursor.y > layer_visual.top && cursor.y < layer_visual.bottom)
 }
-browserEvents.Y.onEvent(browserEvents.KeyEvent.Pressed, function () {
-    if (notstarted && listofcellX.length > 0) {
-        step()
-    }
-})
 browserEvents.MouseLeft.onEvent(browserEvents.MouseButtonEvent.Pressed, function (x, y) {
     if (notstarted && cursorValid()) {
         if (layer_visual.image.getPixel(cursor.x, cursor.y) == 0) {
@@ -89,6 +80,9 @@ browserEvents.MouseLeft.onEvent(browserEvents.MouseButtonEvent.Pressed, function
 browserEvents.onMouseMove(function (x, y) {
     X = x
     Y = y
+})
+browserEvents.Y.onEvent(browserEvents.KeyEvent.Pressed, function () {
+    step()
 })
 browserEvents.I.onEvent(browserEvents.KeyEvent.Pressed, function () {
     invisible = !(invisible)
@@ -195,9 +189,7 @@ layer_neighbors = sprites.create(img`
     . . . . . . . . . . . . . . . . 
     `, SpriteKind.Player)
 cursor = sprites.create(img`
-    . 6 . 
-    6 . 6 
-    . 6 . 
+    6 
     `, SpriteKind.Player)
 layer_neighbors.setFlag(SpriteFlag.Invisible, true)
 while (0 >= width) {
@@ -206,7 +198,7 @@ while (0 >= width) {
 while (0 >= height) {
     height = game.askForNumber("board height", 4)
 }
-let gridgap = game.askForNumber("gap between grid lines", 1) - 1
+let gridgap = 4
 solidBorders = game.ask("Solid borders?")
 layer_buffer.setImage(image.create(width, height))
 layer_visual.setImage(image.create(width, height))
@@ -253,9 +245,6 @@ controller.moveSprite(mySprite)
 listofcellY = []
 listofcellX = []
 game.showLongText("Y to step, U to start, I to see the neighbor layer, and WASD/arrows to move camera", DialogLayout.Full)
-game.onUpdateInterval(10, function () {
-    cursor.setPosition(Math.round(mySprite.x + (X - 50)), Math.round(mySprite.y + (Y - 50)))
-})
 game.onUpdateInterval(100, function () {
     if (listofcellX.length == 0) {
         layer_neighbors.image.fill(0)
@@ -263,5 +252,25 @@ game.onUpdateInterval(100, function () {
     }
     if (!(notstarted)) {
         step()
+    }
+})
+game.onUpdateInterval(10, function () {
+    cursor.setPosition(Math.round(mySprite.x + (X - 50)), Math.round(mySprite.y + (Y - 50)))
+    if (notstarted) {
+        for (let xoffset = 0; xoffset <= 4; xoffset++) {
+            for (let yoffset = 0; yoffset <= 4; yoffset++) {
+                if (alivecolor == layer_visual.image.getPixel(cursor.x, cursor.y)) {
+                	
+                } else {
+                	
+                }
+            }
+        }
+    } else {
+        cursor.setImage(img`
+            . . . 
+            . . . 
+            . . . 
+            `)
     }
 })
