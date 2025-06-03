@@ -189,7 +189,9 @@ layer_neighbors = sprites.create(img`
     . . . . . . . . . . . . . . . . 
     `, SpriteKind.Player)
 cursor = sprites.create(img`
-    6 
+    6 6 6 
+    6 6 6 
+    6 6 6 
     `, SpriteKind.Player)
 layer_neighbors.setFlag(SpriteFlag.Invisible, true)
 while (0 >= width) {
@@ -257,12 +259,12 @@ game.onUpdateInterval(100, function () {
 game.onUpdateInterval(10, function () {
     cursor.setPosition(Math.round(mySprite.x + (X - 50)), Math.round(mySprite.y + (Y - 50)))
     if (notstarted) {
-        for (let xoffset = 0; xoffset <= 4; xoffset++) {
-            for (let yoffset = 0; yoffset <= 4; yoffset++) {
-                if (alivecolor == layer_visual.image.getPixel(cursor.x, cursor.y)) {
-                	
+        for (let xoffset = 0; xoffset <= 2; xoffset++) {
+            for (let yoffset = 0; yoffset <= 2; yoffset++) {
+                if (alivecolor == layer_visual.image.getPixel(cursor.x + (xoffset - 1), cursor.y + (yoffset - 1))) {
+                    cursor.image.setPixel(xoffset, yoffset, 9)
                 } else {
-                	
+                    cursor.image.setPixel(xoffset, yoffset, 6)
                 }
             }
         }
